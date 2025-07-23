@@ -5,10 +5,8 @@ import uuid
 class Ticket(db.Model):
     __tablename__ = 'tickets'
     
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    ticket_number = db.Column(db.String(20), unique=True, nullable=False)
-    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
-    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)    
     # Informações do equipamento
     equipment_serial = db.Column(db.String(100), nullable=False)
     equipment_model = db.Column(db.String(100), nullable=False)
@@ -37,16 +35,10 @@ class Ticket(db.Model):
     
     def __init__(self, **kwargs):
         super(Ticket, self).__init__(**kwargs)
-        if not self.ticket_number:
-            # Gerar número do chamado (formato: TK-YYYYMMDD-XXXX)
-            today = datetime.now().strftime('%Y%m%d')
-            count = Ticket.query.filter(Ticket.ticket_number.like(f'TK-{today}-%')).count()
-            self.ticket_number = f'TK-{today}-{count + 1:04d}'
     
     def to_dict(self):
         return {
             'id': self.id,
-            'ticket_number': self.ticket_number,
             'user_id': self.user_id,
             'equipment_serial': self.equipment_serial,
             'equipment_model': self.equipment_model,
@@ -69,8 +61,8 @@ class Ticket(db.Model):
 class Attachment(db.Model):
     __tablename__ = 'attachments'
     
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    ticket_id = db.Column(db.String(36), db.ForeignKey('tickets.id'), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey("tickets.id"), nullable=False)
     filename = db.Column(db.String(255), nullable=False)
     original_name = db.Column(db.String(255), nullable=False)
     file_path = db.Column(db.String(500), nullable=False)
@@ -93,11 +85,11 @@ class Attachment(db.Model):
 class TicketHistory(db.Model):
     __tablename__ = 'ticket_history'
     
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    ticket_id = db.Column(db.String(36), db.ForeignKey('tickets.id'), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey("tickets.id"), nullable=False)
     action = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.String(36))  # Quem fez a ação
+    user_id = db.Column(db.Integer)  # Quem fez a ação
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
     def to_dict(self):

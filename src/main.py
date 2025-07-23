@@ -29,7 +29,7 @@ app.register_blueprint(tickets_bp, url_prefix='/api')
 app.register_blueprint(equipment_bp, url_prefix='/api')
 
 # Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://reinkjet_user:uawaTmmU5x6gH6MPNBlzMrGXGsKspZVm@dpg-d1na4c63jp1c7382rv30-a.oregon-postgres.render.com/reinkjet"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)

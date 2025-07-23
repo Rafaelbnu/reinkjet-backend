@@ -8,7 +8,7 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.Integer, primary_key=True)
     
     # Informações básicas
     username = db.Column(db.String(80), unique=True, nullable=False)
